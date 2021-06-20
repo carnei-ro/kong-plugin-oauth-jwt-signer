@@ -1,0 +1,46 @@
+---
+_format_version: "1.1"
+
+services:
+- name: httpbin
+  url: https://httpbin.org/anything
+
+routes:
+- hosts: []
+  methods: []
+  name: httpbin
+  paths:
+  - /
+  preserve_host: false
+  regex_priority: 1
+  service: httpbin
+  strip_path: false
+  plugins:
+    - name: oauth-jwt-signer
+      enabled: true
+      config:
+        state_secret: mystatesecret
+        jwt_key_id: privkey1
+        jwt_key_value: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIBOgIBAAJBAO+G+jiCIvgyNETd/YAR3b40Ag+oWEQ2QX1yau1ZbKRs2lUm7YqY
+            xloV2uVLql/y/1MPnV+BtGviMKLNB6KHN0ECAwEAAQJAGCthklQnXS4LsitISiUD
+            YA71akkNZwymfRcPjRWp7clQGmHj9JDKxoCHqRsbA9Ho5ovFWRZD3423Wv7o1PJ0
+            AQIhAP/hqi481mAFjnikFTEr2FWbVdFHQtbsvpEsPRB2jKqhAiEA76Nfs1L+xtOv
+            SgkNH+/5f3c0yccLJeT3dNpP3aCu6KECIHU9pIgDAAaHBTxpkfwxprGytqNpD0sC
+            tl418tS0PMeBAiEAhgP84kGZAEKkNihHscO36WQWHn31KxUYmr34ij5xcuECICsg
+            860obxqltjMuLFJCE47BhAv99+f/4z5lflA/A+Xo
+            -----END RSA PRIVATE KEY-----
+        oauth_provider: custom
+        oauth_provider_alias: gluu
+        oauth_token_endpoint: https://my-gluu-server.com/oxauth/restv1/token
+        oauth_userinfo_endpoint: https://my-gluu-server.com/oxauth/restv1/userinfo
+        oauth_client_id: myclientid
+        oauth_client_secret: myclientsecret
+
+
+# public_key: |
+#     -----BEGIN PUBLIC KEY-----
+#     MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAO+G+jiCIvgyNETd/YAR3b40Ag+oWEQ2
+#     QX1yau1ZbKRs2lUm7YqYxloV2uVLql/y/1MPnV+BtGviMKLNB6KHN0ECAwEAAQ==
+#     -----END PUBLIC KEY-----
