@@ -73,7 +73,7 @@ function _M.execute(conf)
   else
     headers['Location'] = parsed_state['redirect']
   end
-  
+
   return kong.response.exit(status_code, payload, headers)
 end
 

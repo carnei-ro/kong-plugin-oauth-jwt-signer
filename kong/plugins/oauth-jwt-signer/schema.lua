@@ -192,25 +192,25 @@ return {
         if_field = "config.oauth_provider",
         if_match = { eq = "custom" },
         then_field = "config.oauth_token_endpoint",
-        then_match = { required = true }, 
+        then_match = { required = true },
     }, },
     { conditional = {
         if_field = "config.oauth_provider",
         if_match = { eq = "custom" },
         then_field = "config.oauth_userinfo_endpoint",
-        then_match = { required = true }, 
+        then_match = { required = true },
     }, },
     { conditional = {
         if_field = "config.oauth_provider",
         if_match = { eq = "custom" },
         then_field = "config.oauth_provider_alias",
-        then_match = { required = true }, 
+        then_match = { required = true },
     }, },
     { conditional = {
         if_field = "config.jwt_algorithm",
         if_match = { one_of = { "RS256", "RS384", "RS512" } },
         then_field = "config.jwt_key_value",
-        then_match = { custom_validator = validate_ssl_key }, 
+        then_match = { custom_validator = validate_ssl_key },
     }, },
   }
 }

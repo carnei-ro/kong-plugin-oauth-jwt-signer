@@ -53,8 +53,8 @@ function _M:request_profile(conf, access_token, id_token)
   local headers = {
     ["Accept"] = "application/json",
   }
-  headers['Authorization'] = conf['oauth_userinfo_endpoint_header_authorization'] and 
-                              (conf['oauth_userinfo_endpoint_header_authorization_prefix'] .. " " .. access_token) 
+  headers['Authorization'] = conf['oauth_userinfo_endpoint_header_authorization'] and
+                              (conf['oauth_userinfo_endpoint_header_authorization_prefix'] .. " " .. access_token)
                               or nil
 
   local res, err = request:request_uri(conf['oauth_userinfo_endpoint'] .. url_suffix, {

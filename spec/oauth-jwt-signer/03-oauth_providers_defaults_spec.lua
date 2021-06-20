@@ -84,13 +84,13 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
 
   describe("oauth providers defaults", function()
     it("defaults not implemented yet", function()
-      
+
       config["oauth_provider"] = "defaults_not_implemented_yet"
       config["oauth_token_endpoint"] = "http://oauth.foo/token"
       config["oauth_userinfo_endpoint"] = "http://oauth.foo/user"
 
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -126,14 +126,14 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("custom", function()
-      
+
       config["oauth_provider"] = "custom"
       config["oauth_provider_alias"] = "oauth.foo"
       config["oauth_token_endpoint"] = "http://oauth.foo/token"
       config["oauth_userinfo_endpoint"] = "http://oauth.foo/user"
 
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -170,11 +170,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("facebook", function()
-      
+
       config["oauth_provider"] = "facebook"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -210,11 +210,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("github", function()
-      
+
       config["oauth_provider"] = "github"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -250,11 +250,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("gitlab", function()
-      
+
       config["oauth_provider"] = "gitlab"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -290,11 +290,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("google", function()
-      
+
       config["oauth_provider"] = "google"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -330,11 +330,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("microsoft", function()
-      
+
       config["oauth_provider"] = "microsoft"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -370,11 +370,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("yandex", function()
-      
+
       config["oauth_provider"] = "yandex"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")
@@ -410,11 +410,11 @@ describe("[" .. PLUGIN_NAME .. "] oauth_providers_defaults", function()
     end)
 
     it("zoho", function()
-      
+
       config["oauth_provider"] = "zoho"
-      
+
       local plugin_conf = oauth_providers_defaults:set_defaults(config)
-      
+
       assert.is_truthy(plugin_conf)
 
       assert.equal(plugin_conf["jwt_algorithm"], "ES256")

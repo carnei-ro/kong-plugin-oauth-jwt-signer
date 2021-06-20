@@ -21,7 +21,7 @@ tl418tS0PMeBAiEAhgP84kGZAEKkNihHscO36WQWHn31KxUYmr34ij5xcuECICsg
 860obxqltjMuLFJCE47BhAv99+f/4z5lflA/A+Xo
 -----END RSA PRIVATE KEY-----]],
       }
-    
+
       local claims = {
         ['sub'] = "foo@bar.com",
         ['provider'] = "google",
@@ -45,7 +45,7 @@ tl418tS0PMeBAiEAhgP84kGZAEKkNihHscO36WQWHn31KxUYmr34ij5xcuECICsg
         ["jwt_key_id"] = "privkey1",
         ["jwt_key_value"] = "my-jwt-secret",
       }
-    
+
       local claims = {
         ['sub'] = "foo@bar.com",
         ['provider'] = "google",

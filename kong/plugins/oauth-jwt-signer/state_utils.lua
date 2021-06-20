@@ -12,7 +12,7 @@ function _M:validate_and_decode_state(state, key, alg)
   if not state_tbl then
     return nil, 'Could not parse state', nil
   end
-  
+
   local signature, err = openssl_hmac.new(key, alg):final(state_tbl['d'])
   if err then
     return nil, err, nil
@@ -26,7 +26,7 @@ function _M:validate_and_decode_state(state, key, alg)
 end
 
 local parser = {
-  ["v0"] = function(state_string) 
+  ["v0"] = function(state_string)
     local version, redirect = state_string:match("([^;]*)%;(.*)")
     if version ~= "v0" then
       return nil, "State version does not match state at state string."

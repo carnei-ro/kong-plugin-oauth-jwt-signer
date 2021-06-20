@@ -24,7 +24,7 @@ describe("[" .. PLUGIN_NAME .. "] claims_utils", function()
       }
 
       local claims = claims_utils:generate_claims_table(conf, profile)
-      
+
       assert.is_truthy(claims)
       assert.equal(claims['sub'], profile['email'])
       assert.equal(claims['provider'], conf['oauth_provider_alias'])
@@ -45,7 +45,7 @@ describe("[" .. PLUGIN_NAME .. "] claims_utils", function()
       }
 
       local claims = claims_utils:generate_claims_table(conf, profile)
-      
+
       assert.is_truthy(claims)
       assert.equal(claims['sub'], profile['email'])
       assert.equal(claims['provider'], conf['oauth_provider'])
