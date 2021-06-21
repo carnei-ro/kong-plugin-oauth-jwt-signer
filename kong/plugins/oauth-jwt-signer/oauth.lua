@@ -21,7 +21,8 @@ function _M:request_access_token(conf, code, redirect_uri)
         grant_type    = conf['oauth_token_endpoint_grant_type'],
       }),
       headers = {
-        ["Content-type"] = "application/x-www-form-urlencoded"
+        ["Content-type"] = "application/x-www-form-urlencoded",
+        ["Accept"] = "application/json",
       },
       ssl_verify = conf['oauth_ssl_verify'],
   })
