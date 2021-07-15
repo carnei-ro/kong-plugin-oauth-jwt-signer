@@ -175,6 +175,27 @@ return {
               },
               default = {},
           }, },
+          { oauth_userinfo_to_claims = {
+              type = "set",
+              required = true,
+              default = {},
+              elements = {
+                type = "record",
+                required = true,
+                fields = {
+                  { claim = {
+                    type = "string",
+                    required = true,
+                    not_one_of = { "sub" },
+                    err = "'sub' claim cannot be overridden"
+                  }, },
+                  { userinfo = {
+                    type = "string",
+                    required = true,
+                  }, },
+                },
+              },
+          }, },
           { oauth_client_id = {
               type = "string",
               required = true,

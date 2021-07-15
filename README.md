@@ -47,6 +47,7 @@ Version: **0.1.1**
 | config.oauth_userinfo_endpoint_querystring_authorization | **boolean** | true |  |  |
 | config.oauth_userinfo_endpoint_querystring_access_token | **boolean** | true |  |  |
 | config.oauth_userinfo_endpoint_querystring_more | **map[string][string]** (*check `'config.oauth_userinfo_endpoint_querystring_more' object`) | true |  |  |
+| config.oauth_userinfo_to_claims | **set of records** | true |  |  |
 | config.oauth_client_id | **string** | true |  |  |
 | config.oauth_client_secret | **string** | true |  |  |
 
@@ -94,6 +95,7 @@ plugins:
     oauth_userinfo_endpoint_querystring_authorization: false
     oauth_userinfo_endpoint_querystring_access_token: false
     oauth_userinfo_endpoint_querystring_more: {}
+    oauth_userinfo_to_claims: []
     oauth_client_id: ''
     oauth_client_secret: ''
 ```

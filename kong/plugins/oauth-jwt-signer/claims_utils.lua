@@ -122,6 +122,11 @@ function _M:generate_claims_table(conf, profile)
     return profile
   end
   claims = claims_provider[conf.oauth_provider](profile, claims)
+
+  for _,userinfo_to_claim in ipairs(conf.oauth_userinfo_to_claims) do
+    claims[userinfo_to_claim.claim] = profile[userinfo_to_claim.userinfo] and profile[userinfo_to_claim.userinfo] or nil
+  end
+
   return claims
 end
 
