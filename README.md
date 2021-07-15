@@ -11,7 +11,7 @@ Priority: **1000**
 
 ## Plugin Version
 
-Version: **0.1.1**
+Version: **0.2.0**
 
 ## Configs
 
