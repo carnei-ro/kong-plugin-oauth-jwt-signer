@@ -11,7 +11,7 @@ Priority: **1000**
 
 ## Plugin Version
 
-Version: **0.2.0**
+Version: **0.3.0**
 
 ## Configs
 
@@ -21,7 +21,7 @@ Version: **0.2.0**
 | config.state_secret | **string** | true |  |  |
 | config.jwt_algorithm | **string** | true | <pre>RS256</pre> | <pre>- one_of:<br/>  - HS256<br/>  - HS384<br/>  - HS512<br/>  - RS256<br/>  - RS384<br/>  - RS512</pre> |
 | config.jwt_key_id | **string** | true |  |  |
-| config.jwt_key_value | **string** | true |  |  |
+| config.jwt_key_value | **string** | false |  |  |
 | config.jwt_issuer | **string** | true | <pre>kong</pre> |  |
 | config.jwt_validity | **number** | true | <pre>86400</pre> |  |
 | config.jwt_cookie | **boolean** | true | <pre>true</pre> |  |
@@ -50,6 +50,19 @@ Version: **0.2.0**
 | config.oauth_userinfo_to_claims | **set of records** | true |  |  |
 | config.oauth_client_id | **string** | true |  |  |
 | config.oauth_client_secret | **string** | true |  |  |
+| config.vault_enabled | **boolean** | true |  |  |
+| config.vault_aws_region | **string** | true | <pre>us-east-1</pre> |  |
+| config.vault_protocol | **string** | true | <pre>https</pre> |  |
+| config.vault_host | **string** | false |  |  |
+| config.vault_port | **number** | true | <pre>443</pre> |  |
+| config.vault_auth_method | **string** | true | <pre>aws</pre> | <pre>- one_of:<br/>  - aws</pre> |
+| config.vault_auth_backend | **string** | true | <pre>aws</pre> |  |
+| config.vault_role | **string** | false |  |  |
+| config.vault_ssl_verify | **boolean** | true |  |  |
+| config.vault_login_timeout | **number** | true | <pre>2000</pre> |  |
+| config.vault_transit_backend | **string** | true | <pre>transit</pre> |  |
+| config.vault_rsa_keyname | **string** | true | <pre>kong</pre> |  |
+| config.vault_sign_timeout | **number** | true | <pre>2000</pre> |  |
 
 ### 'config.oauth_userinfo_endpoint_querystring_more' object
 
@@ -98,6 +111,19 @@ plugins:
     oauth_userinfo_to_claims: []
     oauth_client_id: ''
     oauth_client_secret: ''
+    vault_enabled: false
+    vault_aws_region: us-east-1
+    vault_protocol: https
+    vault_host: ''
+    vault_port: 443
+    vault_auth_method: aws
+    vault_auth_backend: aws
+    vault_role: ''
+    vault_ssl_verify: false
+    vault_login_timeout: 2000
+    vault_transit_backend: transit
+    vault_rsa_keyname: kong
+    vault_sign_timeout: 2000
 ```
 <!-- END OF KONG-PLUGIN DOCS HOOK -->
 
@@ -127,4 +153,27 @@ plugins:
       oauth_userinfo_endpoint: https://my-gluu-server.com/oxauth/restv1/userinfo
       oauth_client_id: myclientid
       oauth_client_secret: myclientsecret
+```
+
+### Gluu Example with HashiCorp Vault (AWS auth method)
+
+```yaml
+---
+plugins:
+  - name: oauth-jwt-signer
+    enabled: true
+    config:
+      state_secret: mystatesecret
+      jwt_key_id: vault-kong-key01
+      oauth_provider: custom
+      oauth_provider_alias: gluu
+      oauth_token_endpoint: https://my-gluu-server.com/oxauth/restv1/token
+      oauth_userinfo_endpoint: https://my-gluu-server.com/oxauth/restv1/userinfo
+      oauth_client_id: myclientid
+      oauth_client_secret: myclientsecret
+      vault_enabled: true
+      vault_host: "vault.carnei.ro"
+      vault_role: "jwt_signer"
+      vault_transit_backend: "transit/keys/kong"
+      vault_rsa_keyname: "kong-key01"
 ```

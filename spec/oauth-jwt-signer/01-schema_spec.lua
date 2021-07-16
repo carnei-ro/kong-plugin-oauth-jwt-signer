@@ -78,6 +78,68 @@ tl418tS0PMeBAiEAhgP84kGZAEKkNihHscO36WQWHn31KxUYmr34ij5xcuECICsg
     assert.equal('invalid RSA key', err['config']['jwt_key_value'])
   end)
 
+  it("missing jwt_key_value when not vault_enabled", function()
+    local ok, err = validate({
+        ["oauth_provider"]          = "custom",
+        ["oauth_provider_alias"]    = "oauth.foo",
+        ["oauth_token_endpoint"]    = "https://oauth.foo/token",
+        ["oauth_userinfo_endpoint"] = "https://oauth.foo/user",
+        ["state_secret"]            = "mystatesecret",
+        ["jwt_key_id"]              = "privkey1",
+        ["oauth_client_id"]         = "myclientid",
+        ["oauth_client_secret"]     = "myclientsecret",
+      })
+    assert.is_truthy(err)
+    assert.is_nil(ok)
+    assert.equal('required field missing', err['config']['jwt_key_value'])
+  end)
+
+  it("vault_enabled", function()
+    local ok, err = validate({
+        ["oauth_provider"]          = "custom",
+        ["oauth_provider_alias"]    = "oauth.foo",
+        ["oauth_token_endpoint"]    = "https://oauth.foo/token",
+        ["oauth_userinfo_endpoint"] = "https://oauth.foo/user",
+        ["state_secret"]            = "mystatesecret",
+        ["jwt_key_id"]              = "privkey1",
+        ["oauth_client_id"]         = "myclientid",
+        ["oauth_client_secret"]     = "myclientsecret",
+        ["vault_enabled"]           = true,
+        ["vault_protocol"]          = "http",
+        ["vault_host"]              = "localhost",
+        ["vault_port"]              = 9000,
+        ["vault_role"]              = "jwt_signer",
+        ["vault_ssl_verify"]        = false,
+      })
+    --print(require('pl.pretty').write(err))
+    assert.is_truthy(ok)
+    assert.is_nil(err)
+  end)
+
+  it("vault_enabled - failed jwt algorithms", function()
+    local ok, err = validate({
+        ["oauth_provider"]          = "custom",
+        ["oauth_provider_alias"]    = "oauth.foo",
+        ["oauth_token_endpoint"]    = "https://oauth.foo/token",
+        ["oauth_userinfo_endpoint"] = "https://oauth.foo/user",
+        ["state_secret"]            = "mystatesecret",
+        ["jwt_algorithm"]           = "HS256",
+        ["jwt_key_id"]              = "privkey1",
+        ["oauth_client_id"]         = "myclientid",
+        ["oauth_client_secret"]     = "myclientsecret",
+        ["vault_enabled"]           = true,
+        ["vault_protocol"]          = "http",
+        ["vault_host"]              = "localhost",
+        ["vault_port"]              = 9000,
+        ["vault_role"]              = "jwt_signer",
+        ["vault_ssl_verify"]        = false,
+      })
+    assert.is_truthy(err)
+    assert.is_nil(ok)
+    assert.equal("expected one of: RS256, RS384, RS512", err['config']['jwt_algorithm'])
+    assert.equal("must use RS jwt algorithms when vault is enabled", err['@entity'][1])
+  end)
+
   it("cannot overwrite sub via oauth_userinfo_to_claims", function()
     local ok, err = validate({
       ["oauth_provider"]           = "custom",
