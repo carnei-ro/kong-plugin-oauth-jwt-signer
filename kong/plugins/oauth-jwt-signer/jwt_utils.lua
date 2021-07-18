@@ -6,6 +6,10 @@ local openssl_pkey = require "resty.openssl.pkey"
 
 local b64_encode   = require("ngx.base64").encode_base64url
 
+local plugin_name   = ({...})[1]:match("^kong%.plugins%.([^%.]+)")
+local vault_auth    = require("kong.plugins." .. plugin_name .. ".vault.auth")
+local vault_signer  = require("kong.plugins." .. plugin_name .. ".vault.sign_rs")
+
 json.decode_array_with_array_mt(true)
 
 local alg_sign = {
@@ -40,11 +44,19 @@ function _M:sign_token(conf, claims)
   local h = b64_encode(json.encode(headers))
   local c = b64_encode(json.encode(claims))
   local data = h .. "." .. c
-  local signature, err = alg_sign[conf['jwt_algorithm']](data, conf['jwt_key_value'])
-  if err then
-    return nil, err
+
+  local signature, err
+  if not conf.vault_enabled then
+    signature, err = alg_sign[conf['jwt_algorithm']](data, conf['jwt_key_value'])
+    if err then
+      return nil, err
+    end
+    return (data .. "." .. b64_encode(signature)), nil
+  else
+    local vault_token = vault_auth:login(conf)
+    signature = vault_signer:sign(conf, vault_token, data)
+    return (data .. "." .. signature), nil
   end
-  return (data .. "." .. b64_encode(signature)), nil
 end
 
 return _M

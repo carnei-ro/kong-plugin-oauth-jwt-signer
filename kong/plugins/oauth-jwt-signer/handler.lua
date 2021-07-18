@@ -4,7 +4,7 @@ local oauth_providers_defaults = require("kong.plugins." .. plugin_name .. ".oau
 
 local plugin = {
   PRIORITY = 1000,
-  VERSION = "0.2.0",
+  VERSION = "0.3.0",
 }
 
 function plugin:access(plugin_conf)

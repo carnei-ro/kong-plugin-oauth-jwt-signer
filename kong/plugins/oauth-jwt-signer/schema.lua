@@ -3,6 +3,9 @@ local typedefs     = require("kong.db.schema.typedefs")
 local openssl_pkey = require("resty.openssl.pkey")
 
 local function validate_ssl_key(key)
+  if (not key) then
+    return true
+  end
   local _, err =  openssl_pkey.new(key)
   if err then
     return nil, "invalid RSA key"
@@ -42,7 +45,7 @@ return {
           }, },
           { jwt_key_value = {
               type = "string",
-              required = true,
+              required = false,
           }, },
           { jwt_issuer = {
               type = "string",
@@ -204,6 +207,70 @@ return {
               type = "string",
               required = true,
           }, },
+          { vault_enabled = {
+            type = "boolean",
+            default = false,
+            required = true,
+          }, },
+          { vault_aws_region = {
+            type = "string",
+            default = "us-east-1",
+            required = true,
+          }, },
+          { vault_protocol = {
+            type = "string",
+            default = "https",
+            required = true,
+          }, },
+          { vault_host = {
+            type = "string",
+            required = false,
+          }, },
+          { vault_port = {
+            type = "number",
+            default = 443,
+            required = true,
+          }, },
+          { vault_auth_method = {
+            type = "string",
+            default = "aws",
+            required = true,
+            one_of = { "aws" },
+          }, },
+          { vault_auth_backend = {
+            type = "string",
+            default = "aws",
+            required = true,
+          }, },
+          { vault_role = {
+            type = "string",
+            required = false,
+          }, },
+          { vault_ssl_verify = {
+            type = "boolean",
+            default = false,
+            required = true,
+          }, },
+          { vault_login_timeout = {
+            type = "number",
+            default = 2000,
+            required = true,
+          }, },
+          { vault_transit_backend = {
+            type = "string",
+            default = "transit",
+            required = true,
+          }, },
+          { vault_rsa_keyname = {
+            type = "string",
+            default = "kong",
+            required = true,
+          }, },
+          { vault_sign_timeout = {
+            type = "number",
+            default = 2000,
+            required = true,
+          }, },
         },
       },
     },
@@ -232,6 +299,31 @@ return {
         if_match = { one_of = { "RS256", "RS384", "RS512" } },
         then_field = "config.jwt_key_value",
         then_match = { custom_validator = validate_ssl_key },
+    }, },
+    { conditional = {
+        if_field = "config.vault_enabled",
+        if_match = { eq = true },
+        then_field = "config.jwt_algorithm",
+        then_match = { one_of = { "RS256", "RS384", "RS512" } },
+        then_err = "must use RS jwt algorithms when vault is enabled"
+    }, },
+    { conditional = {
+        if_field = "config.vault_enabled",
+        if_match = { eq = false },
+        then_field = "config.jwt_key_value",
+        then_match = { required = true },
+    }, },
+    { conditional = {
+        if_field = "config.vault_enabled",
+        if_match = { eq = true },
+        then_field = "config.vault_host",
+        then_match = { required = true },
+    }, },
+    { conditional = {
+        if_field = "config.vault_enabled",
+        if_match = { eq = true },
+        then_field = "config.vault_role",
+        then_match = { required = true },
     }, },
   }
 }
