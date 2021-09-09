@@ -2,13 +2,14 @@ local plugin_name = ({...})[1]:match("^kong%.plugins%.([^%.]+)")
 local http        = require("kong.plugins." .. plugin_name .. ".vault.connect-better")
 local cjson       = require("cjson.safe").new()
 local split       = require("kong.tools.utils").split
+local b64_encode  = ngx.encode_base64
 cjson.decode_array_with_array_mt(true)
 
 local _M = {}
 
 local function prepare_vault_sign_body_tbl(conf, string_to_sign)
   return {
-    ["input"]                = string_to_sign,
+    ["input"]                = b64_encode(string_to_sign),
     ["marshaling_algorithm"] = "jws",
     ["hash_algorithm"]       = "sha2-" .. conf.jwt_algorithm:sub(3, 5),
     ["signature_algorithm"]  = "pkcs1v15",
@@ -36,9 +37,9 @@ function _M:sign(conf, vault_token, string_to_sign)
     path = '/v1/' .. conf.vault_transit_backend .. '/sign/' .. conf.vault_rsa_keyname,
     body = cjson.encode(vault_sign_body),
     headers = {
-      ["X-Vault-Token"]   = vault_token,
-      ["Accept"]          = "application/json",
-      ["Content-Type"]    = "application/json",
+      ["X-Vault-Token"] = vault_token,
+      ["Accept"]        = "application/json",
+      ["Content-Type"]  = "application/json",
     },
   }
 
